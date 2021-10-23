@@ -2,8 +2,8 @@
 
   <head>
     <meta charset="UTF-8" />
-    <title>Home Page</title>
-    <link href="./static/css/site.css" type="text/css" rel="stylesheet" />
+    <title>{{title}}</title>
+    <link href="./css/site.css" type="text/css" rel="stylesheet" />
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -21,33 +21,33 @@
 
           <!-- Guest users and Logged users -->
           <li class="nav-item">
-            <a class="nav-link" href="#">Home </a>
+            <a class="nav-link" href="/">Home </a>
           </li>
 
           <!-- Logged users -->
           <li class="nav-item">
-            <a class="nav-link" href="#">Welcome, {{username}}</a>
+            <a class="nav-link" href="/profile">Welcome, {{username}}</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Create</a>
+            <a class="nav-link" href="/create-course">Create</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">My Profile</a>
+            <a class="nav-link" href="/profile">My Profile</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Logout</a>
+            <a class="nav-link" href="/logout">Logout</a>
           </li>
 
           <!-- Guest users -->
           <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
+            <a class="nav-link" href="/login">Login</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Register</a>
+            <a class="nav-link" href="/register">Register</a>
           </li>
 
         </ul>
