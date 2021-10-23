@@ -14,4 +14,12 @@ router.get("/create-course", (req, res) => {
   res.render("create-course", { title: "Create Course" });
 });
 
+router.get("/edit-course", (req, res) => {
+  res.render("edit-course", { title: "Edit Course" });
+});
+
+router.get("/details", (req, res) => {
+  res.render("course-details", { title: "Course Details" });
+});
+
 module.exports = router;
