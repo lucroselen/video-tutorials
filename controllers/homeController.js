@@ -5,12 +5,26 @@ const router = express.Router();
 const authServices = require("../services/authServices");
 const courseServices = require("../services/courseServices");
 
-router.get("/", (req, res) => {
-  res.render("home", { title: "Homepage" });
+router.get("/", async (req, res) => {
+  try {
+    let courses = await courseServices.getAll();
+
+    res.render("home", { title: "Homepage", courses });
+  } catch (error) {
+    console.error(error);
+    res.render("home", {
+      title: "Homepage",
+      courses,
+      error:
+        "We are experiencing technical difficulties and are working to resolve them. Thank you for your understanding!",
+    });
+  }
 });
 
 router.get("/profile", async (req, res) => {
-  let courses = await authServices.getCourses(req.user._id);
+  let user = await authServices.getCourses(req.user._id);
+  let courses = user.enrolledCourses.join(", ");
+
   res.render("myProfile", { title: "My Profile", courses });
 });
 
@@ -30,6 +44,7 @@ router.post("/create-course", isAuth, async (req, res) => {
       description,
       imageUrl,
       isPublic,
+      createdAt: new Date().toDateString(),
     });
     res.redirect("/");
   } catch (error) {
