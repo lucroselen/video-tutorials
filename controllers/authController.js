@@ -3,6 +3,7 @@ const { isAuth, isAlreadyLogged } = require("../middlewares/authMiddleware");
 const router = express.Router();
 const { TOKEN_COOKIE_NAME } = require("../config/constants");
 const authServices = require("../services/authServices");
+const { errorHandler } = require("../middlewares/errorHandler");
 
 router.get("/register", isAlreadyLogged, (req, res) => {
   res.render("register", { title: "Register" });
@@ -20,20 +21,25 @@ router.get("/logout", isAuth, (req, res) => {
 router.post("/login", isAlreadyLogged, async (req, res) => {
   try {
     let { username, password } = req.body;
+    if (!username || !password) {
+      res.render("login", { error: "You must fill in both fields!" });
+      return;
+    }
     let user = await authServices.login(username, password);
 
     if (!user) {
       res.render("login", { error: "Invalid username or password!" });
+    } else {
+      let token = await authServices.createToken(user);
+
+      res.cookie(TOKEN_COOKIE_NAME, token, {
+        httpOnly: true,
+      });
+
+      res.redirect("/");
     }
-    let token = await authServices.createToken(user);
-
-    res.cookie(TOKEN_COOKIE_NAME, token, {
-      httpOnly: true,
-    });
-
-    res.redirect("/");
   } catch (error) {
-    res.render("login", { error: getErrorMessage(error) });
+    res.render("login", { error: errorHandler(error) });
   }
 });
 
@@ -55,18 +61,8 @@ router.post("/register", isAlreadyLogged, async (req, res) => {
       res.redirect("/");
     }
   } catch (error) {
-    console.log(error);
-    res.render("register", { error: getErrorMessage(error) });
+    res.render("register", { error: errorHandler(error) });
   }
 });
-
-function getErrorMessage(error) {
-  let errorNames = Object.keys(error.errors);
-  if (errorNames.length > 0) {
-    return error.errors[errorNames[0]].properties.message;
-  } else {
-    return error.message;
-  }
-}
 
 module.exports = router;

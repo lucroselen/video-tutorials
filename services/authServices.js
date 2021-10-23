@@ -25,5 +25,7 @@ const createToken = function (user) {
 
   return jwtSign(payload, SECRET);
 };
-let authServices = { register, login, createToken };
+
+const getCourses = (id) => User.findById(id).populate("enrolledCourses").lean();
+let authServices = { register, login, createToken, getCourses };
 module.exports = authServices;

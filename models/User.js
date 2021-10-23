@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
       /^[A-Z]*[0-9]*$/i,
       "Username should consist only english letters and digits!",
     ],
+    unique: true,
   },
   password: {
     type: String,
@@ -28,6 +29,13 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+userSchema.post("save", function (error, doc, next) {
+  if (error.name === "MongoServerError" && error.code === 11000) {
+    next("Username is already taken!");
+  } else {
+    next(error);
+  }
+});
 userSchema.pre("save", function (next) {
   bcrypt.hash(this.password, 10).then((hash) => {
     this.password = hash;
