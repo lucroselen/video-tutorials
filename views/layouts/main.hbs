@@ -25,40 +25,43 @@
           </li>
 
           <!-- Logged users -->
-          <li class="nav-item">
-            <a class="nav-link" href="/profile">Welcome, {{username}}</a>
-          </li>
+          {{#if user}}
+            <li class="nav-item">
+              <a class="nav-link" href="/profile">Welcome, {{username}}</a>
+            </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="/create-course">Create</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/create-course">Create</a>
+            </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="/profile">My Profile</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/profile">My Profile</a>
+            </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+          {{else}}
+            <!-- Guest users -->
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
 
-          <!-- Guest users -->
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/register">Register</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+            </li>
+          {{/if}}
 
         </ul>
       </nav>
 
       <!-- In case of error, you should display section with class "notifications" -->
       <!-- You can choose to display the first error or all of them (error message/s in your opinion) -->
-      <!--
+      {{#if error}}
         <section class="notifications">
-            <p class="notification-message">Message...</p>
-        </section>-->
+          <p class="notification-message">{{error}}</p>
+        </section>
+      {{/if}}
       {{{body}}}
       <footer class="page-footer font-small">
         <div class="footer-copyright text-center py-3">© 2021

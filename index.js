@@ -6,11 +6,11 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 require("./config/handlebars.js")(app);
 const initDatabase = require("./config/database");
-//const { auth } = require("./middlewares/authMiddleware");
+const { auth } = require("./middlewares/authMiddleware");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-//app.use(auth);
+app.use(auth);
 app.use(express.static(path.resolve("./static")));
 app.use(routes);
 

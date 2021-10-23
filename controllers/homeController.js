@@ -1,5 +1,5 @@
 const express = require("express");
-//const { isAuth } = require("../middlewares/authMiddleware");
+const { isAuth } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -10,11 +10,11 @@ router.get("/profile", (req, res) => {
   res.render("myProfile", { title: "My Profile" });
 });
 
-router.get("/create-course", (req, res) => {
+router.get("/create-course", isAuth, (req, res) => {
   res.render("create-course", { title: "Create Course" });
 });
 
-router.get("/edit-course", (req, res) => {
+router.get("/edit-course", isAuth, (req, res) => {
   res.render("edit-course", { title: "Edit Course" });
 });
 

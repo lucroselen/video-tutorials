@@ -16,11 +16,12 @@
       <div class="col-md-4 text-center">
         <h3 class="my-3">Course Description</h3>
         <p>Angular is a platform for building mobile</p>
-
-        <a class="btn btn-danger" href="#">Delete</a>
-        <a class="btn btn-warning" href="/edit-course">Edit</a>
-        <span class="enrolled-span">You are already enrolled</span>
-        <a class="btn btn-primary" href="#">Enroll</a>
+        {{#if user}}
+          <a class="btn btn-danger" href="#">Delete</a>
+          <a class="btn btn-warning" href="/edit-course">Edit</a>
+          <span class="enrolled-span">You are already enrolled</span>
+          <a class="btn btn-primary" href="#">Enroll</a>
+        {{/if}}
 
       </div>
     </div>
