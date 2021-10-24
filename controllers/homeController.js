@@ -52,8 +52,10 @@ router.post("/create-course", isAuth, async (req, res) => {
   }
 });
 
-router.get("/edit-course", isAuth, (req, res) => {
-  res.render("edit-course", { title: "Edit Course" });
+router.get("/edit-course/:id", isAuth, async (req, res) => {
+  let course = await courseServices.getOne(req.params.id);
+
+  res.render("edit-course", { title: "Edit Course", ...course });
 });
 
 router.get("/details/:id", async (req, res) => {
