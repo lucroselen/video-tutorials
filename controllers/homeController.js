@@ -54,8 +54,14 @@ router.post("/create-course", isAuth, async (req, res) => {
 
 router.get("/edit-course/:id", isAuth, async (req, res) => {
   let course = await courseServices.getOne(req.params.id);
+  let checked = course.isPublic;
+  if (checked) {
+    checked = "checked";
+  } else {
+    checked = "";
+  }
 
-  res.render("edit-course", { title: "Edit Course", ...course });
+  res.render("edit-course", { title: "Edit Course", ...course, checked });
 });
 
 router.get("/details/:id", async (req, res) => {
