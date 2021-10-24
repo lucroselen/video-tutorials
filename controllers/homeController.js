@@ -56,8 +56,9 @@ router.get("/edit-course", isAuth, (req, res) => {
   res.render("edit-course", { title: "Edit Course" });
 });
 
-router.get("/details", (req, res) => {
-  res.render("course-details", { title: "Course Details" });
+router.get("/details/:id", async (req, res) => {
+  let course = await courseServices.getOne(req.params.id);
+  res.render("course-details", { title: "Course Details", ...course });
 });
 
 module.exports = router;
