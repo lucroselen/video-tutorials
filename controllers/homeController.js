@@ -64,8 +64,22 @@ router.get("/edit-course/:id", isAuth, async (req, res) => {
   res.render("edit-course", { title: "Edit Course", ...course, checked });
 });
 
+router.post("/edit-course/:id", isAuth, async (req, res) => {
+  let { title, description, imageUrl, isPublic } = req.body;
+  let id = req.params.id;
+  if (isPublic) {
+    isPublic = true;
+  } else {
+    isPublic = false;
+  }
+  await courseServices.update(id, title, description, imageUrl, isPublic);
+
+  res.redirect(`/details/${id}`);
+});
+
 router.get("/details/:id", async (req, res) => {
   let course = await courseServices.getOne(req.params.id);
+
   res.render("course-details", { title: "Course Details", ...course });
 });
 
