@@ -61,7 +61,12 @@ router.get("/edit-course/:id", isAuth, async (req, res) => {
     checked = "";
   }
 
-  res.render("edit-course", { title: "Edit Course", ...course, checked });
+  res.render("edit-course", {
+    title: "Edit Course",
+    ...course,
+    checked,
+    error: req.query.error,
+  });
 });
 
 router.post("/edit-course/:id", isAuth, async (req, res) => {
@@ -72,9 +77,13 @@ router.post("/edit-course/:id", isAuth, async (req, res) => {
   } else {
     isPublic = false;
   }
-  await courseServices.update(id, title, description, imageUrl, isPublic);
+  try {
+    await courseServices.update(id, title, description, imageUrl, isPublic);
 
-  res.redirect(`/details/${id}`);
+    res.redirect(`/details/${id}`);
+  } catch (error) {
+    res.redirect(`/edit-course/${id}/?error=${errorHandler(error)}`);
+  }
 });
 
 router.get("/details/:id", async (req, res) => {
