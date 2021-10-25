@@ -1,7 +1,6 @@
 const config = require("./config/config")[process.env.NODE_ENV];
 const express = require("express");
 const app = express();
-const { errorHandler } = require("./middlewares/errorHandler");
 const routes = require("./routes.js");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -14,7 +13,6 @@ app.use(cookieParser());
 app.use(auth);
 app.use(express.static(path.resolve("./static")));
 app.use(routes);
-app.use(errorHandler);
 
 initDatabase(config.DB_CONNECTION_STRING)
   .then(() => {
