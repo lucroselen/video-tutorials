@@ -18,12 +18,22 @@ const update = (id, title, description, imageUrl, isPublic) =>
 
 const deleteRecord = (id) => Course.deleteOne({ _id: id });
 
+const enroll = async (courseId, studentId) => {
+  let course = await Course.findById(courseId);
+  let student = await User.findById(studentId);
+
+  course.usersEnrolled.push(student);
+
+  return course.save();
+};
+
 const courseServices = {
   create,
   getAll,
   getOne,
   update,
   deleteRecord,
+  enroll,
 };
 
 module.exports = courseServices;

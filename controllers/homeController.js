@@ -88,13 +88,29 @@ router.post("/edit-course/:id", isAuth, async (req, res) => {
 
 router.get("/details/:id", async (req, res) => {
   let course = await courseServices.getOne(req.params.id);
+  let alreadyEnrolled = false;
+  if (req.user) {
+    alreadyEnrolled = course.usersEnrolled.find((x) => x._id == req.user._id);
+  }
 
-  res.render("course-details", { title: "Course Details", ...course });
+  res.render("course-details", {
+    title: "Course Details",
+    ...course,
+    alreadyEnrolled,
+  });
 });
 
 router.get("/delete/:id", isAuth, async (req, res) => {
   await courseServices.deleteRecord(req.params.id);
   res.redirect("/");
+});
+
+router.get("/enroll/:id", isAuth, async (req, res) => {
+  let courseId = req.params.id;
+  let studentId = req.user._id;
+
+  await courseServices.enroll(courseId, studentId);
+  res.redirect(`/details/${courseId}`);
 });
 
 module.exports = router;
