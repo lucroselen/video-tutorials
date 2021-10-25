@@ -7,7 +7,7 @@ const courseSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, "You must fill in the description!"],
+    required: [true, "The description cannot be empty!"],
     minlength: [20, "The description should be at least 20 characters long!"],
   },
   imageUrl: {
