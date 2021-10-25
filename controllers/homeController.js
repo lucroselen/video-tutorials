@@ -82,7 +82,7 @@ router.post("/edit-course/:id", isAuth, async (req, res) => {
 
     res.redirect(`/details/${id}`);
   } catch (error) {
-    res.redirect(`/edit-course/${id}/?error=${errorHandler(error)}`);
+    res.redirect(`/edit-course/${id}?error=${errorHandler(error)}`);
   }
 });
 
