@@ -16,11 +16,14 @@ const update = (id, title, description, imageUrl, isPublic) =>
     { runValidators: true }
   );
 
+const deleteRecord = (id) => Course.deleteOne({ _id: id });
+
 const courseServices = {
   create,
   getAll,
   getOne,
   update,
+  deleteRecord,
 };
 
 module.exports = courseServices;

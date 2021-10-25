@@ -92,4 +92,9 @@ router.get("/details/:id", async (req, res) => {
   res.render("course-details", { title: "Course Details", ...course });
 });
 
+router.get("/delete/:id", isAuth, async (req, res) => {
+  await courseServices.deleteRecord(req.params.id);
+  res.redirect("/");
+});
+
 module.exports = router;
