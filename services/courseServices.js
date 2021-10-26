@@ -24,9 +24,12 @@ const enroll = async (courseId, studentId) => {
 
   course.usersEnrolled.push(student);
   student.enrolledCourses.push(course);
+  await User.updateOne(
+    { _id: studentId },
+    { enrolledCourses: student.enrolledCourses }
+  );
 
   course.save();
-  student.save();
   return;
 };
 
