@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Username should not be empty!"],
     minLength: [5, "Username should be at least 5 characters long!"],
     validate: [
-      /^[A-Z]*[0-9]*$/i,
+      /^[A-Z0-9]*$/i,
       "Username should consist only english letters and digits!",
     ],
     unique: true,
@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Password should not be empty!"],
     minLength: [5, "Password should be at least 5 characters long!"],
     validate: [
-      /^[A-Z]*[0-9]*$/i,
+      /^[A-Z0-9]*$/i,
       "Password should consist only english letters and digits!",
     ],
   },
