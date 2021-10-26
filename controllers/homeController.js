@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
 
 router.get("/profile", async (req, res) => {
   let user = await authServices.getCourses(req.user._id);
-  let courses = user.enrolledCourses.join(", ");
+  let courses = user.enrolledCourses.map((x) => x.title).join(", ");
 
   res.render("myProfile", { title: "My Profile", courses });
 });
