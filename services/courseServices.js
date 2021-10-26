@@ -23,8 +23,11 @@ const enroll = async (courseId, studentId) => {
   let student = await User.findById(studentId);
 
   course.usersEnrolled.push(student);
+  student.enrolledCourses.push(course);
 
-  return course.save();
+  course.save();
+  student.save();
+  return;
 };
 
 const courseServices = {
