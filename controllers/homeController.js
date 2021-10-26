@@ -36,6 +36,8 @@ router.post("/create-course", isAuth, async (req, res) => {
   let { title, description, imageUrl, isPublic } = req.body;
   if (isPublic) {
     isPublic = true;
+  } else {
+    isPublic = false;
   }
 
   try {
@@ -117,9 +119,11 @@ router.get("/enroll/:id", isAuth, async (req, res) => {
   let courseId = req.params.id;
   let studentId = req.user._id;
   let course = await courseServices.getOne(req.params.id);
+
   if (
     !(course.owner._id.toString() == req.user._id) &&
-    !course.usersEnrolled.find((x) => x._id == req.user._id)
+    !course.usersEnrolled.find((x) => x._id == req.user._id) &&
+    course.isPublic
   ) {
     await courseServices.enroll(courseId, studentId);
     res.redirect(`/details/${courseId}`);
