@@ -1,5 +1,5 @@
 const express = require("express");
-const { isAuth } = require("../middlewares/authMiddleware");
+const { isAuth, isOwner } = require("../middlewares/authMiddleware");
 const { errorHandler } = require("../middlewares/errorHandler");
 const router = express.Router();
 const authServices = require("../services/authServices");
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/profile", async (req, res) => {
+router.get("/profile", isAuth, async (req, res) => {
   let user = await authServices.getCourses(req.user._id);
   let courses = user.enrolledCourses.map((x) => x.title).join(", ");
 
@@ -45,6 +45,7 @@ router.post("/create-course", isAuth, async (req, res) => {
       imageUrl,
       isPublic,
       createdAt: new Date().toDateString(),
+      owner: req.user._id,
     });
     res.redirect("/");
   } catch (error) {
@@ -52,7 +53,7 @@ router.post("/create-course", isAuth, async (req, res) => {
   }
 });
 
-router.get("/edit-course/:id", isAuth, async (req, res) => {
+router.get("/edit-course/:id", isAuth, isOwner, async (req, res) => {
   let course = await courseServices.getOne(req.params.id);
   let checked = course.isPublic;
   if (checked) {
@@ -69,7 +70,7 @@ router.get("/edit-course/:id", isAuth, async (req, res) => {
   });
 });
 
-router.post("/edit-course/:id", isAuth, async (req, res) => {
+router.post("/edit-course/:id", isAuth, isOwner, async (req, res) => {
   let { title, description, imageUrl, isPublic } = req.body;
   let id = req.params.id;
   if (isPublic) {
@@ -93,14 +94,21 @@ router.get("/details/:id", async (req, res) => {
     alreadyEnrolled = course.usersEnrolled.find((x) => x._id == req.user._id);
   }
 
+  let isOwnedBy = false;
+  if (req.user) {
+    isOwnedBy = course.owner._id.toString() == req.user._id;
+  }
+
   res.render("course-details", {
     title: "Course Details",
     ...course,
     alreadyEnrolled,
+    isOwnedBy,
+    error: req.query.error,
   });
 });
 
-router.get("/delete/:id", isAuth, async (req, res) => {
+router.get("/delete/:id", isAuth, isOwner, async (req, res) => {
   await courseServices.deleteRecord(req.params.id);
   res.redirect("/");
 });
@@ -108,9 +116,16 @@ router.get("/delete/:id", isAuth, async (req, res) => {
 router.get("/enroll/:id", isAuth, async (req, res) => {
   let courseId = req.params.id;
   let studentId = req.user._id;
-
-  await courseServices.enroll(courseId, studentId);
-  res.redirect(`/details/${courseId}`);
+  let course = await courseServices.getOne(req.params.id);
+  if (
+    !(course.owner._id.toString() == req.user._id) &&
+    !course.usersEnrolled.find((x) => x._id == req.user._id)
+  ) {
+    await courseServices.enroll(courseId, studentId);
+    res.redirect(`/details/${courseId}`);
+  } else {
+    res.redirect(`/details/${courseId}?error=URL injecting is not nice!`);
+  }
 });
 
 module.exports = router;

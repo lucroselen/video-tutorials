@@ -14,15 +14,18 @@
         <h3 class="my-3">Course Description</h3>
         <p>{{description}}</p>
         {{#if user}}
-
-          <a class="btn btn-danger" href="/delete/{{_id}}">Delete</a>
-          <a class="btn btn-warning" href="/edit-course/{{_id}}">Edit</a>
+          {{#if isOwnedBy}}
+            <a class="btn btn-danger" href="/delete/{{_id}}">Delete</a>
+            <a class="btn btn-warning" href="/edit-course/{{_id}}">Edit</a>
+          {{/if}}
           {{#if isPublic}}
-            {{#if alreadyEnrolled}}
-              <span class="enrolled-span">You are already enrolled</span>
-            {{else}}
-              <a class="btn btn-primary" href="/enroll/{{_id}}">Enroll</a>
-            {{/if}}
+            {{#unless isOwnedBy}}
+              {{#if alreadyEnrolled}}
+                <span class="enrolled-span">You are already enrolled</span>
+              {{else}}
+                <a class="btn btn-primary" href="/enroll/{{_id}}">Enroll</a>
+              {{/if}}
+            {{/unless}}
           {{else}}
             <br />
             <br />

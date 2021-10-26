@@ -28,6 +28,7 @@ const courseSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  owner: { type: mongoose.Types.ObjectId, ref: "User" },
 });
 
 const Course = mongoose.model("Course", courseSchema);
