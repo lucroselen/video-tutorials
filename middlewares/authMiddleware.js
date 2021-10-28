@@ -46,8 +46,10 @@ exports.isOwner = async function (req, res, next) {
     next();
   } else {
     res.locals.isOwner = false;
-    res.redirect(
-      `/details/${req.params.id}?error=You are not the owner of this course!`
-    );
+    res
+      .status(401)
+      .redirect(
+        `/details/${req.params.id}?error=You are not the owner of this course!`
+      );
   }
 };
